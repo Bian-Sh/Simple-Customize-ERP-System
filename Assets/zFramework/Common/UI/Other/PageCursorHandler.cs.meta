@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: f1ddde8288b829d4cb56972375b5e6fd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - hotAreaCursor: {fileID: 2800000, guid: 9d75288b5723add46b1d8634d6f4c314, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c223d0f4c8a0e1a4799e74fc8f379bfa, type: 3}
+  m_Name: ContextItemConfigration
+  m_EditorClassIdentifier: 
+  configList:
+    array:
+    - model: Building.Empty
+      items:
+        array:
+        - label: "\u7167\u660E\u706F\u5177\u63A7\u5236"
+          icon: {fileID: 21300002, guid: 1aae40854cb78a144b1d1a930a1aa2be, type: 3}
+          command: LighttingSystem
+        - label: "\u7A7A\u8C03\u65B0\u98CE\u63A7\u5236"
+          icon: {fileID: 21300000, guid: 1b054ce93b368ea4e94b73499c3ff4fe, type: 3}
+          command: AccessControl
+        - label: "\u697C\u5B87\u95E8\u7981\u63A7\u5236"
+          icon: {fileID: 21300000, guid: 89dc886d3b270d041a74b07d7cdf8f53, type: 3}
+          command: AirSystem
+        - label: "\u529F\u653E\u8BBE\u5907\u63A7\u5236"
+          icon: {fileID: 21300034, guid: e0e32383476960746b77fc89ee0fedf5, type: 3}
+          command: IrrigationCtrPanel
+        - label: "\u8F66\u4F4D\u9884\u7559"
+          icon: {fileID: 21300000, guid: bc16c947416876a4f89d44b02890915b, type: 3}
+          command: MeetingRoom
+        - label: "\u704C\u6E89\u63A7\u5236"
+          icon: {fileID: 21300000, guid: 4f7e9c69595dc434d94428b4e292bf91, type: 3}
+          command: PackReserved
+    - model: Building. Floor
+      items:
+        array:
+        - label: "\u7167\u660E\u706F\u5177\u63A7\u5236"
+          icon: {fileID: 21300000, guid: 1c8a58b4ff8f2cc44809469e3b060284, type: 3}
+          command: Building. Floor.01
+        - label: "\u7A7A\u8C03\u65B0\u98CE\u63A7\u5236"
+          icon: {fileID: 21300000, guid: da8709bf8b11af5418656df2a19c3691, type: 3}
+          command: Building. Floor.02
+        - label: "\u697C\u5B87\u95E8\u7981\u63A7\u5236"
+          icon: {fileID: 21300000, guid: 5854c3cc9b4e05d4da9244d31e142a3f, type: 3}
+          command: Building. Floor.03
+        - label: "\u529F\u653E\u8BBE\u5907\u63A7\u5236"
+          icon: {fileID: 21300000, guid: 25f971eebc5cce3449d0025033cde191, type: 3}
+          command: Building. Floor.04
+    - model: Room.DengJu
+      items:
+        array:
+        - label: "\u706F\u5177\u63A7\u5236\u9879"
+          icon: {fileID: 0}
+          command: LighttingSystem
+        - label: "\u706F\u5177\u63A7\u5236\u9879"
+          icon: {fileID: 0}
+          command: LighttingSystem
+        - label: "\u706F\u5177\u63A7\u5236\u9879"
+          icon: {fileID: 0}
+          command: LighttingSystem
+        - label: "\u706F\u5177\u63A7\u5236\u9879"
+          icon: {fileID: 0}
+          command: LighttingSystem
+    - model: Floor.Room
+      items:
+        array:
+        - label: "\u7167\u660E\u706F\u5177\u63A7\u5236"
+          icon: {fileID: 0}
+          command: LighttingSystem
+        - label: "\u7167\u660E\u706F\u5177\u63A7\u52361"
+          icon: {fileID: 0}
+          command: AccessControl
+        - label: "\u7167\u660E\u706F\u5177\u63A7\u52362"
+          icon: {fileID: 0}
+          command: AirSystem
+        - label: "\u7167\u660E\u706F\u5177\u63A7\u52363"
+          icon: {fileID: 0}
+          command: IrrigationCtrPanel
+        - label: "\u7167\u660E\u706F\u5177\u63A7\u52364"
+          icon: {fileID: 0}
+          command: MeetingRoom
+        - label: "\u7167\u660E\u706F\u5177\u63A7\u52365"
+          icon: {fileID: 0}
+          command: PackReserved

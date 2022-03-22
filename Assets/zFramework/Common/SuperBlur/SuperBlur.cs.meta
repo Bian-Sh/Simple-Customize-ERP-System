@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 032e36de1bdb3ea4ca993dbd174d218f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - blurMaterial: {fileID: 2100000, guid: 781a52c5cf3f62c49b9627cc79a8f99e, type: 2}
+  - UIMaterial: {fileID: 2100000, guid: eac87155b05924543a3be609394aed3e, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
