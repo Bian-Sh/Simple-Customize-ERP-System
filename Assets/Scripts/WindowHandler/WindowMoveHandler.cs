@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static PInvoke;
-[RequireComponent(typeof(Image))]
+[RequireComponent(typeof(Graphic))]
 public class WindowMoveHandler : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPointerExitHandler
 {
     static bool isDrag = false;
