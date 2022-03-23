@@ -1,11 +1,11 @@
-﻿using Malee.List;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 [RequireComponent(typeof(Toggle))]
 public class ToggleAdditionColorHandler : MonoBehaviour,IToggleActionHandler
 {
-    [SerializeField, Reorderable] ConfigInfoArray config;
+    [SerializeField] List <ConfigInfo> config;
     private Toggle toggle;
     #region Configuration
     [Serializable]
@@ -20,8 +20,6 @@ public class ToggleAdditionColorHandler : MonoBehaviour,IToggleActionHandler
             target.color = isOn ? on : off;
         }
     }
-    [Serializable]
-    internal class ConfigInfoArray : ReorderableArray<ConfigInfo> { }
     #endregion
 
 

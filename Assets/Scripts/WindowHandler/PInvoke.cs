@@ -92,7 +92,13 @@ public static class PInvoke
     #region Static Function
     //最小化窗口
     //具体窗口参数看这     https://msdn.microsoft.com/en-us/library/windows/desktop/ms633548(v=vs.85).aspx
-    public static void SetMinWindows() => ShowWindow(UnityHWnd, SW_SHOWMINIMIZED);
+    public static void SetMinWindows()
+    {
+        if (!Application.isEditor)
+        {
+            ShowWindow(UnityHWnd, SW_SHOWMINIMIZED);
+        }
+    }
 
     //拖动窗口
     public static void DragWindow()

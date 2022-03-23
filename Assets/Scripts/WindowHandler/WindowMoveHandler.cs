@@ -9,14 +9,12 @@ public class WindowMoveHandler : MonoBehaviour,IPointerDownHandler,IPointerUpHan
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData) => isDrag = eventData.pointerId==-1;
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData) => isDrag = false;
     void IPointerUpHandler.OnPointerUp(PointerEventData eventData) => isDrag = !(eventData.pointerId==-1);
-#if !UNITY_EDITOR
     private void Update()
     {
-        if (isDrag)
+        if (!Application.isEditor&&isDrag)
         {
             DragWindow();
         }
     }
-#endif
 }
 

@@ -12,11 +12,7 @@ public class WindowResizeHandler : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField]
     private int minWidthPixel = 768;
     [SerializeField]
-    private int minHeightPixel = 512;
-    [SerializeField]
     private int maxWidthPixel = 2048;
-    [SerializeField]
-    private int maxHeightPixel = 2048;
 
     public Texture2D wnes;
     private float aspect = 16 / 9f;

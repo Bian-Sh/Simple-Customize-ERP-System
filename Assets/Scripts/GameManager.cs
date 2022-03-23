@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
         SetWindowLongPtr(UnityHWnd, GWL_STYLE, (IntPtr)sty);
         SetResolution();
     }
+
+    public void Minimize() => SetMinWindows();
     public void ShutDown()
     {
 #if UNITY_EDITOR

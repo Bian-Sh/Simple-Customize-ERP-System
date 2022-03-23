@@ -1,13 +1,7 @@
 fileFormatVersion: 2
-guid: 30643999d6e39c0418e76d5533fe630e
+guid: b015dd609e0558e44b532a591bd7be29
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -284512077656390671
-    second: Bubble_Top_0
-  - first:
-      213: 388191654034129855
-    second: Bubble_Top_1
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -42,17 +36,17 @@ TextureImporter:
     mipBias: -100
     wrapU: 1
     wrapV: 1
-    wrapW: -1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteBorder: {x: 108, y: 108, z: 108, w: 108}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
@@ -100,7 +94,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
@@ -112,56 +106,14 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Bubble_Top_0
-      rect:
-        serializedVersion: 2
-        x: 63
-        y: 85
-        width: 40
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1f38bf4d5c53d0cf0800000000000000
-      internalID: -284512077656390671
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bubble_Top_1
-      rect:
-        serializedVersion: 2
-        x: 2
-        y: 16
-        width: 165
-        height: 69
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 19, y: 17, z: 22, w: 10}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fb3c97ba042236500800000000000000
-      internalID: 388191654034129855
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: c429a2a6de3896447a56989856ad4940
     internalID: 0
     vertices: []
     indices: 
