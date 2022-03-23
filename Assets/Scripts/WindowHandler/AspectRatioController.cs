@@ -194,7 +194,7 @@ public class AspectRatioController : MonoBehaviour
         }, IntPtr.Zero);
 
         // Apply aspect ratio to current resolution.
-        SetAspectRatio(aspectRatioWidth, aspectRatioHeight, true);
+        //SetAspectRatio(aspectRatioWidth, aspectRatioHeight, true);
 
         // Save current fullscreen state.
         wasFullscreenLastFrame = Screen.fullScreen;

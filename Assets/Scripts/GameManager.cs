@@ -1,22 +1,48 @@
 using System;
-using System.Runtime.InteropServices;
-using System.Text;
 using UnityEngine;
 using static PInvoke;
 public class GameManager : MonoBehaviour
 {
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
-    static void DisableMaximum()
+    public static int height = 1080;
+    public static int width = 1920;
+    public static string h_key = "erp_client_height";
+    public static string w_key = "erp_client_width";
+    [EditorButton]
+    private void ClearPrefs()
     {
-        Debug.LogError($"{nameof(GameManager)}: 2555");
-#if !UNITY_EDITOR
-        // 禁用最大化窗口
-        // Find window handle of main Unity window.
+        if (PlayerPrefs.HasKey(h_key))
+        {
+            PlayerPrefs.DeleteKey(h_key);
+        }
+
+        if (PlayerPrefs.HasKey(w_key))
+        {
+            PlayerPrefs.DeleteKey(w_key);
+        }
+
+    }
+    public void OnResoulutionChanged(int h, int w, bool fs)
+    {
+        PlayerPrefs.SetInt(h_key, height = h);
+        PlayerPrefs.SetInt(w_key, width = w);
+    }
+    private static void SetResolution()
+    {
+        height = PlayerPrefs.GetInt(h_key, height);
+        width = PlayerPrefs.GetInt(w_key, width);
+        Screen.SetResolution(width, height, false);
+    }
+
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
+    static void InitAppWindow()
+    {
+        if (Application.isEditor) return;
         var dwStyles = GetWindowLongPtr(UnityHWnd, GWL_STYLE);
         var sty = ((ulong)dwStyles);
-        sty &= ~WS_MAXIMIZEBOX;
+        sty &= ~(WS_CAPTION| WS_DLGFRAME)&WS_POPUP;
         SetWindowLongPtr(UnityHWnd, GWL_STYLE, (IntPtr)sty);
-#endif
+        SetResolution();
     }
     public void ShutDown()
     {
