@@ -98,6 +98,24 @@ public static class PInvoke
         {
             ShowWindow(UnityHWnd, SW_SHOWMINIMIZED);
         }
+        else
+        {
+            Debug.LogWarning($"{nameof(PInvoke)}:为避免编辑器行为异常， 请打包 exe 后测试！");
+        }
+    }
+
+    // 应用窗口置顶
+    public static void SetTopmost(bool isTopmost)
+    {
+        if (!Application.isEditor)
+        {
+            int ptr = isTopmost ? -1 : -2;
+            SetWindowPos(UnityHWnd, ptr, 0, 0, 0, 0, 1 | 2 | 64);//0x0040
+        }
+        else
+        {
+            Debug.LogWarning($"{nameof(PInvoke)}: 为避免编辑器行为异常，请打包 exe 后测试！");
+        }
     }
 
     //拖动窗口
@@ -145,4 +163,3 @@ public static class PInvoke
     }
     #endregion
 }
-

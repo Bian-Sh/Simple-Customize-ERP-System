@@ -22,4 +22,7 @@ public class GameManager : MonoBehaviour
         Application.Quit();
 #endif
     }
+
+    public void Topmost(bool isUnPin) => SetTopmost(!isUnPin);
+
 }
