@@ -3,10 +3,12 @@
 /// 铰链
 /// </summary>
 [Serializable]
-public class Joints
+public class Joints:Data
 {
-    public const string Table = "Joint";
-
+    /// <summary>
+    /// 所属的产品的索引
+    /// </summary>
+    public int product_idx;
     /// <summary>
     /// 铰链名称
     /// </summary>

@@ -18,9 +18,9 @@ public class Test : MonoBehaviour
 
 
         { // 代码创建 joint sql 表
-            if (!mySqlTools.HasTable(Joints.Table))
+            if (!mySqlTools.HasTable(nameof(Joints)))
             {
-                mySqlTools.CreateTable(Joints.Table, new[] { "UID", "User", "Password" }, new[] { "tinytext", "tinytext", "tinytext" });
+                mySqlTools.CreateTable(nameof(Joints), new[] { "UID", "User", "Password" }, new[] { "tinytext", "tinytext", "tinytext" });
             }
         }
 

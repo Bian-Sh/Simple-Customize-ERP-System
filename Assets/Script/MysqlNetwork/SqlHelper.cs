@@ -408,6 +408,22 @@ namespace Imdork.Mysql
             query += ")";
             return ExecuteNonQuery(query);
         }
+
+        //public int CreateTable(string name, Type type)
+        //{
+        //    if (field.Length != type.Length)
+        //    {
+        //        throw new Exception("columns.Length != colType.Length");
+        //    }
+        //    string query = $"CREATE TABLE {name} ({field[0]} {type[0]}";
+        //    for (int i = 1; i < field.Length; ++i)
+        //    {
+        //        query += $", {field[i]} {type[i]}";
+        //    }
+        //    query += ")";
+        //    return ExecuteNonQuery(query);
+        //}
+
         #endregion
 
         /// <summary>

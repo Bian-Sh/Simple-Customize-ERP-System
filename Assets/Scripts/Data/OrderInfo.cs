@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// 订单信息
 /// </summary>
 [Serializable]
-public class OrderInfo 
+public class OrderInfo :Data
 {
     /// <summary>
     /// 订单编号

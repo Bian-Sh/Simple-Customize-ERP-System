@@ -2,8 +2,13 @@
 /// <summary>
 /// 支付状态
 /// </summary>
-public class PaymentState
+public class PaymentState:Data
 {
+    /// <summary>
+    /// 所属订单索引
+    /// </summary>
+    public int order_idx;
+
     /// <summary>
     /// 总额
     /// </summary>
@@ -14,8 +19,13 @@ public class PaymentState
     public List<Payment> payments;
 }
 
-public class Payment 
+public class Payment :Data
 {
+    /// <summary>
+    /// 所属支付状态索引
+    /// </summary>
+    public int payment_idx;
+
     /// <summary>
     /// 款项类目
     /// </summary>
@@ -28,4 +38,8 @@ public class Payment
     /// 数据录入时间
     /// </summary>
     public string data;
+    /// <summary>
+    /// 备注
+    /// </summary>
+    public string summary;
 }

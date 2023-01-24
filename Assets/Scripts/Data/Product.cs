@@ -4,8 +4,12 @@ using System.Collections.Generic;
 /// 产品
 /// </summary>
 [Serializable]
-public class Product
+public class Product:Data
 {
+   /// <summary>
+   /// 所属订单索引
+   /// </summary>
+    public int order_idx;
     /// <summary>
     /// 产品名称
     /// </summary>

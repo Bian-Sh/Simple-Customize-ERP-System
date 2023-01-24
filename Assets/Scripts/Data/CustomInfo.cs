@@ -3,8 +3,12 @@
 /// 客户信息
 /// </summary>
 [Serializable]
-public class CustomInfo
+public class CustomInfo:Data
 {
+    /// <summary>
+    /// 所属订单索引
+    /// </summary>
+    public int order_idx;
     /// <summary>
     /// 用户名
     /// </summary>
