@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
+using FullscreenEditor;
 using MySql.Data.MySqlClient;
 using UnityEngine;
 /*
@@ -175,7 +178,7 @@ namespace Imdork.Mysql
                 throw new Exception("col.Length != operation.Length != values.Length");
             }
 
-            string query = "SELECT *";           
+            string query = "SELECT *";
 
             query += " FROM " + tableName + " WHERE " + cols[0] + operations[0] + "'" + values[0] + "' ";
 
@@ -261,7 +264,7 @@ namespace Imdork.Mysql
                 query += " AND " + selectKeys[i] + " " + operation[i] + " " + "'" + selectValues[i] + "' ";
             }
             return ExecuteNonQuery(query);
-        }    
+        }
         #endregion
 
         #region 插入语句
@@ -348,19 +351,59 @@ namespace Imdork.Mysql
         #endregion
 
         #region 创建表
-        /// <summary>
-        /// 创建表 param name=表名 col=字段名 colType=字段类型
-        /// </summary>
-        public int CreateTable(string name, string[] col, string[] colType)
+
+
+        public bool HasTable(string table)
         {
-            if (col.Length != colType.Length)
+            string query = $"SELECT count(*)  as number FROM information_schema.tables where table_schema=\"user\" and table_name = \"{table}\";";
+            using (MySqlCommand cmd = new MySqlCommand(query, conn))
+            {
+                try
+                {
+                    var result = false;
+                    using (var Dr = cmd.ExecuteReader())
+                    {
+                        Dr.Read();
+                        var value = Convert.ToInt32(Dr["number"]);
+                        Debug.Log(value);
+                        result =  value > 0;
+                    }
+
+
+                    return result;
+                }
+                catch (MySqlException E)
+                {
+                    throw new Exception(E.Message);
+                }
+                finally
+                {
+                    cmd.Dispose();
+                }
+            }
+        }
+
+
+
+        /// <summary>
+        ///创建表 param name=表名 col=字段名 colType=字段类型
+
+        /// </summary>
+        /// <param name="name">表名</param>
+        /// <param name="col">字段名称</param>
+        /// <param name="colType">字段类型</param>
+        /// <returns>创建成功</returns>
+        /// <exception cref="Exception"></exception>
+        public int CreateTable(string name, string[] field, string[] type)
+        {
+            if (field.Length != type.Length)
             {
                 throw new Exception("columns.Length != colType.Length");
             }
-            string query = "CREATE TABLE " + name + " (" + col[0] + " " + colType[0];
-            for (int i = 1; i < col.Length; ++i)
+            string query = $"CREATE TABLE {name} ({field[0]} {type[0]}";
+            for (int i = 1; i < field.Length; ++i)
             {
-                query += ", " + col[i] + " " + colType[i];
+                query += $", {field[i]} {type[i]}";
             }
             query += ")";
             return ExecuteNonQuery(query);
@@ -394,7 +437,6 @@ namespace Imdork.Mysql
 
         }
 
-        
+
     }
 }
-  

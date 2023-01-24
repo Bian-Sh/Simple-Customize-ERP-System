@@ -16,8 +16,18 @@ public class Test : MonoBehaviour
         //创建表方法              表名       字段名称                              字段类型
         //mySqlTools.CreateTable("userdata", new[] { "UID", "User","Password" }, new[] { "tinytext", "tinytext", "tinytext" });
 
+
+        { // 代码创建 joint sql 表
+            if (!mySqlTools.HasTable(Joints.Table))
+            {
+                mySqlTools.CreateTable(Joints.Table, new[] { "UID", "User", "Password" }, new[] { "tinytext", "tinytext", "tinytext" });
+            }
+        }
+
+
+
         //查询方法
-        FindMysql(mySqlTools, "userdata", new[] { "UID", "User", "Password" });
+        //FindMysql(mySqlTools, "userdata", new[] { "UID", "User", "Password" });
 
         //  插入方法                表名         字段名                             插入数据
         //mySqlTools.InsertInto("userdata", new[] { "UID", "User", "Password" },new[] {"52022","ddxj1","123456" });
@@ -44,13 +54,13 @@ public class Test : MonoBehaviour
         //object values = MysqlTools.GetValue(ds, "UID");
         //print(values); //最后打印15924
 
-       // mySqlTools.DeleteContents("userdata"); 删除表中全部数据
+        // mySqlTools.DeleteContents("userdata"); 删除表中全部数据
 
 
         //关闭数据库
         mySqlTools.Close();
 
-        
+
     }
 
     /// <summary>
@@ -59,27 +69,26 @@ public class Test : MonoBehaviour
     /// <param name="mySqlTools">Mysql框架类</param>
     /// <param name="tableName">表名</param>
     /// <param name="items">字段名称</param>
-    void FindMysql(SqlHelper mySqlTools,string tableName,string[] items)
+    void FindMysql(SqlHelper mySqlTools, string tableName, string[] items)
     {
         var ds = mySqlTools.Select(tableName, items);
         var pairs = MysqlTools.TableData(ds);
-        DebugMysql(pairs);      
+        DebugMysql(pairs);
     }
     /// <summary>
     /// 打印查询数据库
     /// </summary>
     /// <param name="pairs"></param>
-    private void DebugMysql(Dictionary<string,object>[] pairs)
+    private void DebugMysql(Dictionary<string, object>[] pairs)
     {
         for (int i = 0; i < pairs.Length; i++)
         {
             foreach (var table in pairs[i])
             {
-                string tableList = string.Format("第{0}行，表字段名对应数据是 {1}", i + 1, table);
+                string tableList = $"第{i + 1}行，表字段名对应数据是 {table}";
                 print(tableList);
             }
-        }  
+        }
     }
-       
+
 }
- 
