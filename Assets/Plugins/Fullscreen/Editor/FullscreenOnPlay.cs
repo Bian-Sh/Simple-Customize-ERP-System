@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,9 +13,9 @@ namespace FullscreenEditor {
 
         static FullscreenOnPlay() {
 
-            #if UNITY_2017_2_OR_NEWER
+#if UNITY_2017_2_OR_NEWER
             EditorApplication.playModeStateChanged += state => {
-                switch (state) {
+                switch(state) {
                     case PlayModeStateChange.ExitingEditMode:
                         SetIsPlaying(true);
                         break;
@@ -19,13 +23,20 @@ namespace FullscreenEditor {
                     case PlayModeStateChange.ExitingPlayMode:
                         SetIsPlaying(false);
                         break;
+
+                    case PlayModeStateChange.EnteredPlayMode:
+                        foreach(var fs in Fullscreen.GetAllFullscreen())
+                            if(fs && fs is FullscreenWindow && (fs as FullscreenWindow).CreatedByFullscreenOnPlay) {
+                                FixGameViewMouseInput.UpdateGameViewArea(fs);
+                            }
+                        break;
                 }
             };
 
             EditorApplication.pauseStateChanged += state => SetIsPlaying(EditorApplication.isPlayingOrWillChangePlaymode && state == PauseState.Unpaused);
-            #else 
+#else
             EditorApplication.playmodeStateChanged += () => SetIsPlaying(EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isPaused);
-            #endif
+#endif
 
         }
 
@@ -37,60 +48,73 @@ namespace FullscreenEditor {
 
             // We close all the game views created on play, even if the option was disabled in the middle of the play mode
             // This is done to best reproduce the default behaviour of the maximize on play
-            if (!playing) {
-                foreach (var fs in fullscreens)
-                    if (fs && fs.CreatedByFullscreenOnPlay) // fs might have been destroyed
+            if(!playing) {
+                foreach(var fs in fullscreens)
+                    if(fs && fs.CreatedByFullscreenOnPlay) // fs might have been destroyed
                         fs.Close();
                 return;
             }
 
-            if (!FullscreenPreferences.FullscreenOnPlayEnabled)
+            if(!FullscreenPreferences.FullscreenOnPlayEnabled)
                 return; // Nothing to do here
 
-            var gameView = FullscreenUtility
+            if(FullscreenUtility
                 .GetGameViews()
-                .FirstOrDefault(gv => gv && gv.GetPropertyValue<bool>("maximizeOnPlay"));
+                .Any(gv => {
+                    if(!gv) return false;
 
-            if (!gameView && FullscreenUtility.GetGameViews().Length > 0)
+                    return PlaymodeBehaviourImplemented(gv) && GetEnterPlayModeBehavior(gv) == CustomEnterPlayModeBehavior.PlayFullscreen;
+                })) {
+                EditorUtility.DisplayDialog("Fullscreen on play conflict", "Seems like you have both Unity's built-in fullscreen on play and Fullscreen Editor's plugin enabled. Please, make sure you only have one of them enabled to prevent conflicts.", "Got it!");
+                FullscreenPreferences.FullscreenOnPlayEnabled.Value = false;
+                return;
+            }
+
+            var gameView = FullscreenOnPlayGameView();
+
+            if(!gameView) // no gameview has the fullscreen on play option enabled
                 return;
 
-            foreach (var fs in fullscreens)
-                if (fs && fs.Rect.Overlaps(gameView.position)) // fs might have been destroyed
+            foreach(var fs in fullscreens)
+                if(fs && fs.Rect.Overlaps(gameView.position)) // fs might have been destroyed
                     return; // We have an open fullscreen where the new one would be, so let it there
 
-            if (gameView && Fullscreen.GetFullscreenFromView(gameView))
+            if(gameView && Fullscreen.GetFullscreenFromView(gameView))
                 return; // The gameview is already in fullscreen
 
             var gvfs = Fullscreen.MakeFullscreen(Types.GameView, gameView);
             gvfs.CreatedByFullscreenOnPlay = true;
         }
 
-        [InitializeOnLoadMethod]
-        private static void OverrideMaximizeOnPlay() {
-            After.Frames(1, () => { // Call after one frame, so we don't acess the styles class before it's created
+        internal static EditorWindow FullscreenOnPlayGameView() {
+            var mainGv = FullscreenUtility.GetMainGameView();
 
-                var stylesClass = Types.GameView.GetNestedType("Styles", ReflectionUtility.FULL_BINDING);
-                var currentContent = stylesClass.GetFieldValue<GUIContent>("maximizeOnPlayContent");
+            if(mainGv) return mainGv;
 
-                var newContent = new GUIContent("Fullscreen on Play", FullscreenUtility.FullscreenOnPlayIcon);
-                var originalContent = new GUIContent(currentContent);
+            return FullscreenUtility
+                .GetGameViews()
+                .FirstOrDefault(gv => gv);
+        }
 
-                var overrideEnabled = FullscreenPreferences.FullscreenOnPlayEnabled;
+        internal enum CustomEnterPlayModeBehavior {
+            PlayFocused,
+            PlayMaximized,
+            PlayUnfocused,
+            PlayFullscreen
+        }
 
-                currentContent.text = overrideEnabled ? newContent.text : originalContent.text;
-                currentContent.image = overrideEnabled ? newContent.image : originalContent.image;
-                currentContent.tooltip = overrideEnabled ? newContent.tooltip : originalContent.tooltip;
+        internal static bool PlaymodeBehaviourImplemented(EditorWindow playmodeView) {
+            return playmodeView.HasProperty("enterPlayModeBehavior");
+        }
 
-                FullscreenPreferences.FullscreenOnPlayEnabled.OnValueSaved += v => {
-                    currentContent.text = v ? newContent.text : originalContent.text;
-                    currentContent.image = v ? newContent.image : originalContent.image;
-                    currentContent.tooltip = v ? newContent.tooltip : originalContent.tooltip;
+        internal static CustomEnterPlayModeBehavior GetEnterPlayModeBehavior(EditorWindow playmodeView) {
+            return (CustomEnterPlayModeBehavior)playmodeView.GetPropertyValue<int>("enterPlayModeBehavior");
+        }
 
-                    if (FullscreenUtility.GetMainGameView())
-                        FullscreenUtility.GetMainGameView().SetPropertyValue("maximizeOnPlay", v);
-                };
-
-            });
+        internal static void SetEnterPlayModeBehavior(EditorWindow playmodeView, CustomEnterPlayModeBehavior behaviour) {
+            if(playmodeView.HasProperty("playModeBehaviorIdx"))
+                playmodeView.SetPropertyValue("playModeBehaviorIdx", (int)behaviour); // unity forgot to update this prop when updating the play mode behaviour
+            playmodeView.SetPropertyValue("enterPlayModeBehavior", (int)behaviour);
         }
 
     }

@@ -31,5 +31,12 @@ namespace FullscreenEditor {
         /// <summary>UnityEditor.WindowLayout</summary>
         public static readonly Type WindowLayout = ReflectionUtility.FindClass("UnityEditor.WindowLayout");
 
+        /// <summary>UnityEngine.EnumDataUtility</summary>
+        public static readonly Type EnumDataUtility = ReflectionUtility.FindClass("UnityEngine.EnumDataUtility");
+
+        /// <summary>UnityEditor.PlayModeView.EnterPlayModeBehavior</summary>
+        // Enum type
+        public static readonly Type EnterPlayModeBehavior = PlayModeView?.GetNestedType("EnterPlayModeBehavior");
+
     }
 }

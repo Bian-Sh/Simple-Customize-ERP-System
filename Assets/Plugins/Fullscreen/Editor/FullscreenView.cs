@@ -1,9 +1,9 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using ContainerWindow = UnityEngine.ScriptableObject;
 using HostView = UnityEngine.ScriptableObject;
 using View = UnityEngine.ScriptableObject;
-using ContainerWindow = UnityEngine.ScriptableObject;
 
 namespace FullscreenEditor {
     public class FullscreenView : FullscreenContainer {
@@ -25,15 +25,15 @@ namespace FullscreenEditor {
         }
 
         internal void OpenView(Rect rect, ScriptableObject view) {
-            if (!view)
+            if(!view)
                 throw new ArgumentNullException("view");
 
             view.EnsureOfType(Types.View);
 
-            if (FullscreenUtility.IsLinux)
+            if(FullscreenUtility.IsLinux)
                 throw new PlatformNotSupportedException("Linux does not support fullscreen from View class");
 
-            if (Fullscreen.GetFullscreenFromView(view)) {
+            if(Fullscreen.GetFullscreenFromView(view)) {
                 Logger.Debug("Tried to fullscreen a view already in fullscreen");
                 return;
             }
@@ -53,7 +53,7 @@ namespace FullscreenEditor {
 
         public override void Close() {
 
-            if (m_src.View && m_dst.View)
+            if(m_src.View && m_dst.View)
                 SwapViews(m_src.View, m_dst.View); // Swap back the source view
 
             base.Close();

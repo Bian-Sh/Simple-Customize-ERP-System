@@ -51,7 +51,9 @@ namespace FullscreenEditor {
             var displayImmediately = true;
             var setFocus = true;
 
-            if (cw.HasMethod("Show", new [] { typeof(int), typeof(bool), typeof(bool) }))
+            if (cw.HasMethod("Show", new[] { typeof(int), typeof(bool), typeof(bool), typeof(bool), typeof(int) }))
+                cw.InvokeMethod("Show", (int)ShowMode.NoShadow, loadPosition, displayImmediately, setFocus, 0);
+            else if (cw.HasMethod("Show", new[] { typeof(int), typeof(bool), typeof(bool) }))
                 cw.InvokeMethod("Show", (int)ShowMode.NoShadow, loadPosition, displayImmediately);
             else
                 cw.InvokeMethod("Show", (int)ShowMode.NoShadow, loadPosition, displayImmediately, setFocus);

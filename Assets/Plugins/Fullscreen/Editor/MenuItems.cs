@@ -44,7 +44,7 @@ namespace FullscreenEditor {
 
         [MenuItem(Shortcut.GAME_VIEW_PATH, false, 100)]
         private static void GVMenuItem() {
-            var gameView = FindCandidateForFullscreen(Types.GameView, FullscreenUtility.GetMainGameView());
+            var gameView = FindCandidateForFullscreen(Types.PlayModeView ?? Types.GameView, FullscreenUtility.GetMainGameView());
             Fullscreen.ToggleFullscreen(Types.GameView, gameView);
         }
 
@@ -103,12 +103,15 @@ namespace FullscreenEditor {
                     candidate.Show();
                 }
 
-                var fs = Fullscreen.MakeFullscreen(Types.GameView, candidate, true);
+                var fs = ScriptableObject.CreateInstance<FullscreenWindow>();
+                var rect = displays[i].UnityCorrectedArea;
+                fs.OpenWindow(rect, Types.GameView, candidate, true);
+
                 var gameView = fs.ActualViewPyramid.Window;
                 var targetDisplay = FullscreenPreferences.MosaicMapping.Value[i];
 
-                fs.Rect = displays[i].DpiCorrectedArea;
                 FullscreenUtility.SetGameViewDisplayTarget(gameView, targetDisplay);
+
             }
         }
 

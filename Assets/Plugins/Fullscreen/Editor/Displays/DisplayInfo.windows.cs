@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using FullscreenEditor.Windows;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace FullscreenEditor {
@@ -50,6 +51,13 @@ namespace FullscreenEditor {
                     Mathf.Round(size.x / scaleFactor2),
                     Mathf.Round(size.y / scaleFactor2)
                 );
+            }
+        }
+
+        public Rect UnityCorrectedArea {
+            get {
+                var rect = DpiCorrectedArea;
+                return InternalEditorUtility.GetBoundsOfDesktopAtPoint(rect.center);
             }
         }
 

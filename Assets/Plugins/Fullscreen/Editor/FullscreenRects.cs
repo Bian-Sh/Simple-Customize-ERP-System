@@ -92,7 +92,7 @@ namespace FullscreenEditor {
                     return GetMonitorRect(7);
 
                 default:
-                    Logger.Warning("Invalid fullscreen mode, please fix this by changing the rect source mode in preferences.");
+                    Logger.Warning("Invalid fullscreen mode, please fix this by changing the placement source mode in preferences.");
                     return new Rect(Vector2.zero, Vector2.one * 300f);
             }
         }
@@ -107,7 +107,7 @@ namespace FullscreenEditor {
                     .FirstOrDefault(d => d.PrimaryDisplay);
 
                 if (mainDisplay != null)
-                    return mainDisplay.DpiCorrectedArea;
+                    return mainDisplay.UnityCorrectedArea;
 
                 Logger.Error("No main display??? This should not happen, falling back to Screen.currentResolution");
             }
@@ -132,7 +132,7 @@ namespace FullscreenEditor {
                 return GetMainDisplayRect();
             }
 
-            return d.DpiCorrectedArea;
+            return d.UnityCorrectedArea;
         }
 
         /// <summary>Returns a rect defined by the user in the preferences.</summary>
@@ -179,12 +179,14 @@ namespace FullscreenEditor {
             var width = User32.GetSystemMetrics(SM_CXVIRTUALSCREEN);
             var height = User32.GetSystemMetrics(SM_CYVIRTUALSCREEN);
 
-            return new Rect {
+            var rect = new Rect {
                 yMin = y,
-                    xMin = x,
-                    width = width,
-                    height = height,
+                xMin = x,
+                width = width,
+                height = height,
             };
+
+            return FullscreenUtility.DpiCorrectedArea(rect);
         }
 
     }

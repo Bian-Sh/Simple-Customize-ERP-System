@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 
-[assembly : InternalsVisibleToAttribute("FullscreenTests")]
+[assembly: InternalsVisibleToAttribute("FullscreenTests")]
 
 namespace FullscreenEditor {
     /// <summary>Main entry point for finding, creating and closing <see cref="FullscreenContainer"/>.</summary>
@@ -28,14 +28,14 @@ namespace FullscreenEditor {
         /// <param name="ignoreUnknownState">Do not return fullscreen containers that don't have a valid ContainerWindow.</param>
         public static FullscreenContainer[] GetAllFullscreen(bool cached = true, bool ignoreUnknownState = true) {
 
-            if (cached && cachedFullscreen != null && cachedFullscreenAll != null)
+            if(cached && cachedFullscreen != null && cachedFullscreenAll != null)
                 return ignoreUnknownState ?
                     cachedFullscreen :
                     cachedFullscreenAll;
 
             cachedFullscreenAll = Resources.FindObjectsOfTypeAll<FullscreenContainer>();
 
-            if (!ignoreUnknownState)
+            if(!ignoreUnknownState)
                 return cachedFullscreenAll;
 
             cachedFullscreen = cachedFullscreenAll
@@ -60,7 +60,7 @@ namespace FullscreenEditor {
         /// <summary>Returns the parent <see cref="FullscreenContainer"/> for a given view or window, or null if it's not in fullscreen.</summary>
         /// <param name="rootView">Compare by the root view, otherwise compare by the container.</param>
         public static FullscreenContainer GetFullscreenFromView(ScriptableObject viewOrWindow, bool rootView = true) {
-            if (!viewOrWindow)
+            if(!viewOrWindow)
                 return null;
 
             var pyramid = new ViewPyramid(viewOrWindow);
@@ -77,7 +77,7 @@ namespace FullscreenEditor {
         /// <param name="window">The window that will go fullscreen. If null a new one will be instantiated based on the given type.</param>
         /// <typeparam name="T">The type of the window to instantiate if the given window is null.</typeparam>
         /// <returns>Returns the newly created <see cref="FullscreenWindow"/>.</returns>
-        public static FullscreenWindow MakeFullscreen<T>(T window = null)where T : EditorWindow {
+        public static FullscreenWindow MakeFullscreen<T>(T window = null) where T : EditorWindow {
             return MakeFullscreen(typeof(T), window);
         }
 
@@ -99,7 +99,7 @@ namespace FullscreenEditor {
         /// <param name="view">The view that will go fullscreen, cannot be null.</param>
         /// <returns>Returns the newly created <see cref="FullscreenView"/>.</returns>
         public static FullscreenView MakeFullscreen(ScriptableObject view) {
-            if (!view)
+            if(!view)
                 throw new ArgumentNullException("view");
 
             view.EnsureOfType(Types.View);
@@ -115,7 +115,7 @@ namespace FullscreenEditor {
         /// <summary>Open a new fullscreen if there's none open, otherwise, close the one already open.</summary>
         /// <param name="window">The window that will go fullscreen. If null a new one will be instantiated based on the given type.</param>
         /// <typeparam name="T">The type of the window to instantiate if the given window is null.</typeparam>
-        public static void ToggleFullscreen<T>(T window = null)where T : EditorWindow {
+        public static void ToggleFullscreen<T>(T window = null) where T : EditorWindow {
             ToggleFullscreen(typeof(T), window);
         }
 
@@ -126,7 +126,7 @@ namespace FullscreenEditor {
             var rect = FullscreenRects.GetFullscreenRect(FullscreenPreferences.RectSource, window);
             var oldFullscreen = GetFullscreenFromView(window);
 
-            if (oldFullscreen) {
+            if(oldFullscreen) {
                 oldFullscreen.Close();
                 return;
             }
@@ -136,7 +136,7 @@ namespace FullscreenEditor {
             var newFullscreen = MakeFullscreen(type, window);
 
             newFullscreen.didPresent += () => {
-                if (oldFullscreen)
+                if(oldFullscreen)
                     oldFullscreen.Close();
             };
         }
@@ -147,7 +147,7 @@ namespace FullscreenEditor {
             var rect = FullscreenRects.GetFullscreenRect(FullscreenPreferences.RectSource, view);
             var oldFullscreen = GetFullscreenFromView(view);
 
-            if (oldFullscreen) {
+            if(oldFullscreen) {
                 oldFullscreen.Close();
                 return;
             }
@@ -157,7 +157,7 @@ namespace FullscreenEditor {
             var newFullscreen = MakeFullscreen(view);
 
             newFullscreen.didPresent += () => {
-                if (oldFullscreen)
+                if(oldFullscreen)
                     oldFullscreen.Close();
             };
         }
