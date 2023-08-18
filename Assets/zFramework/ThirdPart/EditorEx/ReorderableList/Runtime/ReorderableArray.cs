@@ -73,7 +73,7 @@ namespace Malee.List
 
             return array.IndexOf(value);
         }
-        #region ±ßÉÏº£ĞÂÔö  2021Äê7ÔÂ25ÈÕ
+        #region è¾¹ä¸Šæµ·æ–°å¢  2021å¹´7æœˆ25æ—¥
         public T Find(Predicate<T> predicate)
         {
             return array.Find(predicate);
