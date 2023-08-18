@@ -125,7 +125,11 @@ public static class PInvoke
         SendMessage(UnityHWnd, 0xA1, 0x02, 0);
         SendMessage(UnityHWnd, 0x0202, 0, 0);
     }
-
+    public static void MouseButtonUp()
+    {
+        ReleaseCapture();
+        SendMessage(UnityHWnd, 0x0202, 0, 0);
+    }
     public static IntPtr GetUnityWindow()
     {
         var unityHWnd = IntPtr.Zero;

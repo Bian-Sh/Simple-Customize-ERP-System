@@ -1,20 +1,26 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static PInvoke;
 [RequireComponent(typeof(Graphic))]
-public class WindowMoveHandler : MonoBehaviour,IPointerDownHandler,IPointerUpHandler,IPointerExitHandler
+public class WindowMoveHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    static bool isDrag = false;
-    void IPointerDownHandler.OnPointerDown(PointerEventData eventData) => isDrag = eventData.pointerId==-1;
-    void IPointerExitHandler.OnPointerExit(PointerEventData eventData) => isDrag = false;
-    void IPointerUpHandler.OnPointerUp(PointerEventData eventData) => isDrag = !(eventData.pointerId==-1);
-    private void Update()
+    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
-        if (!Application.isEditor&&isDrag)
+        if (eventData.pointerId == -1)
         {
             DragWindow();
         }
     }
+    void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
+    {
+        if (eventData.pointerId == -1)
+        {
+            MouseButtonUp();
+        }
+    }
+
+
 }
 
