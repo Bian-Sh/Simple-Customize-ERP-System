@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 using UnityEngine;
@@ -87,6 +88,18 @@ public static class PInvoke
     [DllImport("user32.dll")]
     public static extern bool SendMessage(IntPtr hwnd, int wMsg, int wParam, int lParam);
 
+    //获取鼠标位置
+    [DllImport("user32.dll")]
+    private static extern bool GetCursorPos(out POINT lpPoint);
+
+    // 获取屏幕信息
+    [DllImport("user32.dll")]
+    private static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr lprcClip, EnumMonitorsDelegate lpfnEnum, IntPtr dwData);
+
+    private delegate bool EnumMonitorsDelegate(IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFOEX lpmi);
 
     #endregion
     #region Static Function
@@ -103,6 +116,22 @@ public static class PInvoke
             Debug.LogWarning($"{nameof(PInvoke)}:为避免编辑器行为异常， 请打包 exe 后测试！");
         }
     }
+
+    public static void SetNoFrameWindow()
+    {
+        if (!Application.isEditor)
+        {
+            var dwStyles = GetWindowLongPtr(UnityHWnd, GWL_STYLE);
+            var sty = ((ulong)dwStyles);
+            sty &= ~(WS_CAPTION | WS_DLGFRAME) & WS_POPUP;
+            SetWindowLongPtr(UnityHWnd, GWL_STYLE, (IntPtr)sty);
+        }
+        else
+        {
+            Debug.LogWarning($"{nameof(PInvoke)}:为避免编辑器行为异常， 请打包 exe 后测试！");
+        }
+    }
+
 
     // 应用窗口置顶
     public static void SetTopmost(bool isTopmost)
@@ -122,14 +151,17 @@ public static class PInvoke
     public static void DragWindow()
     {
         ReleaseCapture();
-        SendMessage(UnityHWnd, 0xA1, 0x02, 0);
-        SendMessage(UnityHWnd, 0x0202, 0, 0);
+        // 模拟鼠标左键在非客户区域按下
+        SendMessage(UnityHWnd, 0xA1 /* WM_NCLBUTTONDOWN */, 0x02 /* HTCAPTION */, 0);
+        // 模拟鼠标左键在客户区域释放
+        SendMessage(UnityHWnd, 0x0202 /* WM_LBUTTONUP */, 0, 0);
     }
     public static void MouseButtonUp()
     {
         ReleaseCapture();
-        SendMessage(UnityHWnd, 0x0202, 0, 0);
+        SendMessage(UnityHWnd, 0x0202 /* WM_LBUTTONUP */, 0, 0);
     }
+
     public static IntPtr GetUnityWindow()
     {
         var unityHWnd = IntPtr.Zero;
@@ -147,7 +179,55 @@ public static class PInvoke
         }, IntPtr.Zero);
         return unityHWnd;
     }
+    public static void SetFullScreen(IntPtr windowHandle)
+    {
+        // 获取鼠标光标位置
+        GetCursorPos(out POINT point);
 
+        // 获取所有屏幕
+        var monitors = GetMonitorInfo();
+
+        // 遍历所有屏幕，查找包含鼠标光标的屏幕
+        foreach (var monitor in monitors)
+        {
+            if (point.X >= monitor.Left &&
+                point.X <= monitor.Right &&
+                point.Y >= monitor.Top &&
+                point.Y <= monitor.Bottom)
+            {
+                // 找到了包含窗口中心的屏幕
+                // 设置窗口位置和大小以模拟全屏展示
+                int width = monitor.Right - monitor.Left;
+                int height = monitor.Bottom - monitor.Top;
+                SetWindowPos(windowHandle, 0, monitor.Left, monitor.Top, width, height, SWP_SHOWWINDOW);
+                break;
+            }
+        }
+    }
+    public static List<MonitorInfo> GetMonitorInfo()
+    {
+        var monitors = new List<MonitorInfo>();
+
+        EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero, (IntPtr hMonitor, IntPtr hdcMonitor, ref RECT lprcMonitor, IntPtr dwData) =>
+        {
+            var info = new MONITORINFOEX();
+            info.Size = Marshal.SizeOf(info);
+            GetMonitorInfo(hMonitor, ref info);
+
+            var monitor = new MonitorInfo();
+            monitor.Left = info.Monitor.Left;
+            monitor.Top = info.Monitor.Top;
+            monitor.Right = info.Monitor.Right;
+            monitor.Bottom = info.Monitor.Bottom;
+            monitor.IsPrimary = (info.Flags & 1) != 0;
+
+            monitors.Add(monitor);
+
+            return true;
+        }, IntPtr.Zero);
+
+        return monitors;
+    }
     #endregion
     #region Assistant
     /// <summary>
@@ -162,8 +242,37 @@ public static class PInvoke
         public int Bottom;
         public override string ToString()
         {
-            return $"left = {Left}\nright = {Right}\ntop = {Top}\nbottom = {Bottom}";
+            return $"left = {Left}  right = {Right}  top = {Top}  bottom = {Bottom}";
         }
+    }
+    [StructLayout(LayoutKind.Sequential)]
+    private struct POINT
+    {
+        public int X;
+        public int Y;
+    }
+    public struct MonitorInfo
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+        public bool IsPrimary;
+
+        public override string ToString()
+        {
+            return $"(left = {Left}, top = {Top}, right = {Right}, bottom =  {Bottom})";
+        }
+    }
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    private struct MONITORINFOEX
+    {
+        public int Size;
+        public RECT Monitor;
+        public RECT WorkArea;
+        public uint Flags;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        public string DeviceName;
     }
     #endregion
 }
